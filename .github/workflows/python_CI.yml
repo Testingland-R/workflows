@@ -23,6 +23,10 @@ on:
         required: false
         type: string
         default: 'pip install -r requirements.txt'
+    secrets:
+      repo_token:
+        description: 'Token to access the repository'
+        required: true
 
 jobs:
   test:
@@ -38,8 +42,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ inputs.python-version }}
-
-      # Aquí añade tú el caché (investiga cómo usar actions/cache con hash de requirements)
 
       - name: Install dependencies
         run: |
