@@ -28,7 +28,6 @@ on:
         description: 'SonarQube token for authentication'
         required: true
         type: string
-        default: ${{ secrets.SONAR_TOKEN }}
 
 jobs:
 
