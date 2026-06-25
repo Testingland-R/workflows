@@ -27,7 +27,6 @@ on:
       sonar-token:
         description: 'SonarQube token for authentication'
         required: true
-        type: string
 
 jobs:
 
