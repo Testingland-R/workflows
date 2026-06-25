@@ -33,7 +33,7 @@ jobs:
 
   python-CI-Unit-Tests:
     name: Python CI - Unit Tests
-    runs-on: ubuntu-latest
+    runs-on: Testland-Ubuntu
     defaults:
       run:
         working-directory: ${{ inputs.working-directory }}
@@ -53,7 +53,7 @@ jobs:
 
   sonarqube-scan:
     name: SonarQube Scan
-    runs-on: ubuntu-latest
+    runs-on: Testland-Ubuntu
     steps:
       - uses: actions/checkout@v4
         with:
