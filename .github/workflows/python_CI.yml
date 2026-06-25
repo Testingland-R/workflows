@@ -23,13 +23,11 @@ on:
         required: false
         type: string
         default: 'pip install -r requirements.txt'
-    secrets:
-      repo_token:
-        description: 'Token to access the repository'
-        required: true
 
 jobs:
-  test:
+
+  python-CI-Unit-Tests:
+    name: Python CI - Unit Tests
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -37,16 +35,25 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ inputs.python-version }}
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           ${{ inputs.dependency-install-command }}
-
       - name: Run tests
         run: ${{ inputs.test-command }}
+
+  sonarqube-scan:
+    name: SonarQube Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@7006c4492b2e0ee0f816d36501671557c97f5995
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
