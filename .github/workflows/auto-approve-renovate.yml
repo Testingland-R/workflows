@@ -1,0 +1,39 @@
+name: Renovate PR aprove
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  pull_request_review:
+    types: [dismissed]
+
+jobs:
+  approve:
+    runs-on: Linux
+    if: github.actor == 'renovate[bot]' || contains(github.event.pull_request.labels.*.name, 'renovate')
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            // If the PR is not from renovate, we do nothing
+            const reviews = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number
+            });
+            const alreadyApproved = reviews.data.some(r => r.state === 'APPROVED' && r.user.login !== 'renovate[bot]');
+            if (alreadyApproved) {
+              console.log('There is already a valid approval from a user other than renovate[bot]. No action taken.');
+              return;
+            }
+            // If no valid approval exists, we approve the PR
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              event: 'APPROVE',
+              body: '✅ Approved automatically for platformAutomerge to perform the squash.'
+            });
