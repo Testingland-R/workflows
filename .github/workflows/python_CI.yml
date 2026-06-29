@@ -23,6 +23,10 @@ on:
         required: false
         type: string
         default: 'pip install -r requirements.txt'
+      sonar-project-key:
+        description: 'SonarQube project key'
+        required: true
+        type: string
     secrets:
       sonar-token:
         description: 'SonarQube token for authentication'
@@ -60,6 +64,10 @@ jobs:
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@7006c4492b2e0ee0f816d36501671557c97f5995
         with:
+          args: >
+            -Dsonar.projectKey=${{ inputs.sonar-project-key }}
+            -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
           skipSignatureVerification: true
+
         env:
           SONAR_TOKEN: ${{ secrets.sonar-token }}
