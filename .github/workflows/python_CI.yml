@@ -55,6 +55,7 @@ jobs:
         run: ${{ inputs.test-command }}
 
   sonarqube-scan:
+    dependencies: python-CI-Unit-Tests
     name: SonarQube Scan
     runs-on: Linux
     steps:
