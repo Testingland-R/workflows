@@ -45,4 +45,4 @@ jobs:
           SONAR_TOKEN: ${{ secrets.sonar-token }}
 
       - name: "Show Quality Gate Status"
-        run: echo "Quality Gate Status: ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
+        run: echo 'Quality Gate Status: ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}'
