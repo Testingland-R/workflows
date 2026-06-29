@@ -2,24 +2,31 @@ name: "SonarQube Scan"
 
 on:
   workflow_call:
+
     inputs:
       sonar-project-key:
         description: 'SonarQube project key'
         required: true
         type: string
+
     secrets:
       sonar-token:
         description: 'SonarQube token for authentication'
         required: true
 
+
 jobs:
+
   sonarqube-scan:
     name: SonarQube Scan
     runs-on: Linux
+
     steps:
+
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@7006c4492b2e0ee0f816d36501671557c97f5995
         with:
@@ -29,3 +36,13 @@ jobs:
           skipSignatureVerification: true
         env:
           SONAR_TOKEN: ${{ secrets.sonar-token }}
+
+      - name: SonarQube Quality Gate Check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.sonar-token }}
+
+      - name: "Show Quality Gate Status"
+        run: echo "Quality Gate Status: ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
