@@ -1,0 +1,33 @@
+name: "Reusable Python CI workflow"
+
+on:
+  workflow_call:
+    inputs:
+      sonar-project-key:
+        description: 'SonarQube project key'
+        required: true
+        type: string
+    secrets:
+      sonar-token:
+        description: 'SonarQube token for authentication'
+        required: true
+
+jobs:
+  sonarqube-scan:
+    needs: python-CI-Unit-Tests
+    name: SonarQube Scan
+    runs-on: Linux
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@7006c4492b2e0ee0f816d36501671557c97f5995
+        with:
+          args: >
+            -Dsonar.projectKey=${{ inputs.sonar-project-key }}
+            -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
+          skipSignatureVerification: true
+
+        env:
+          SONAR_TOKEN: ${{ secrets.sonar-token }}
