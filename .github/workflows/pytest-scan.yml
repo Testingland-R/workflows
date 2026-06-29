@@ -23,6 +23,11 @@ on:
         required: false
         type: string
         default: 'pip install -r requirements.txt'
+      coverage-artifact-name:
+        description: 'Name of the coverage artifact to upload'
+        required: false
+        type: string
+        default: 'coverage-report'
 
 jobs:
 
@@ -45,3 +50,9 @@ jobs:
           ${{ inputs.dependency-install-command }}
       - name: Run tests
         run: ${{ inputs.test-command }}
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.coverage-artifact-name }}
+          path: coverage.xml
+          retention-days: 7

@@ -8,6 +8,11 @@ on:
         description: 'SonarQube project key'
         required: true
         type: string
+      coverage-artifact-name:
+        description: 'Name of the coverage artifact to upload'
+        required: false
+        type: string
+        default: 'coverage-report'
 
     secrets:
       sonar-token:
@@ -27,12 +32,19 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.coverage-artifact-name }}
+          path: .
+
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@7006c4492b2e0ee0f816d36501671557c97f5995
         with:
           args: >
             -Dsonar.projectKey=${{ inputs.sonar-project-key }}
             -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
+            -Dsonar.python.coverage.reportPaths=coverage.xml
           skipSignatureVerification: true
         env:
           SONAR_TOKEN: ${{ secrets.sonar-token }}
