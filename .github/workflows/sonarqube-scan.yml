@@ -1,4 +1,4 @@
-name: "Reusable Python CI workflow"
+name: "SonarQube Scan"
 
 on:
   workflow_call:
@@ -14,7 +14,6 @@ on:
 
 jobs:
   sonarqube-scan:
-    needs: python-CI-Unit-Tests
     name: SonarQube Scan
     runs-on: Linux
     steps:
@@ -28,6 +27,5 @@ jobs:
             -Dsonar.projectKey=${{ inputs.sonar-project-key }}
             -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
           skipSignatureVerification: true
-
         env:
           SONAR_TOKEN: ${{ secrets.sonar-token }}
