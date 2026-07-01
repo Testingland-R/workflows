@@ -76,7 +76,7 @@ jobs:
         run: terraform plan -var-file=${ inputs.environment }.tfvars -out=${ inputs.plan-artifact-name }
 
       - name: Upload Terraform plan artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ inputs.plan-artifact-name }}
           path: ${ inputs.plan-artifact-path }/${ inputs.plan-artifact-name }
