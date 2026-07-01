@@ -1,0 +1,54 @@
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: 'Directory where the code is located'
+        required: false
+        type: string
+        default: '.'
+      plan-artifact-name:
+        description: 'Name of the Terraform plan artifact to upload'
+        required: false
+        type: string
+        default: 'terraform-plan-${{ vars.AWS_ACCOUNT_ID }}'
+      plan-artifact-path:
+        description: 'Path where the Terraform plan artifact will be stored'
+        required: false
+        type: string
+        default: 'tfplans'
+
+jobs:
+
+  terraform-plan:
+    name: Terraform Plan
+    runs-on: Linux
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    env:
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.7.6
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -var-file=${ vars.ENVIRONMENT}.tfvars -out=${ inputs.plan-artifact-name }
+
+      - name: Upload Terraform plan artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.plan-artifact-name }}
+          path: ${ inputs.plan-artifact-path }/${ inputs.plan-artifact-name }
+          retention-days: 7
