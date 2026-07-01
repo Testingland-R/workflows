@@ -16,14 +16,6 @@ on:
         required: false
         type: string
         default: 'tfplans'
-      aws-id:
-        description: 'AWS ID'
-        required: true
-        type: string
-      aws-secret:
-        description: 'AWS Secret'
-        required: true
-        type: string
       environment:
         description: 'Environment name'
         required: true
@@ -32,6 +24,12 @@ on:
         description: 'AWS Account ID'
         required: true
         type: string
+    secrets:
+      aws-id:
+        description: 'AWS Access Key ID'
+        required: true
+      aws-secret:
+        description: 'AWS Secret
 
 jobs:
 
@@ -44,8 +42,8 @@ jobs:
     env:
       AWS_ACCOUNT_ID: ${{ inputs.aws-account-id }}
       ENVIRONMENT: ${{ inputs.environment }}
-      AWS_ACCESS_KEY_ID: ${{ inputs.aws-id }}
-      AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.aws-id }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.aws-secret }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
