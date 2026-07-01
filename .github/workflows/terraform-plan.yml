@@ -29,7 +29,7 @@ on:
         description: 'AWS Access Key ID'
         required: true
       aws-secret:
-        description: 'AWS Secret
+        description: 'AWS Secret'
 
 jobs:
 
