@@ -69,7 +69,10 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -var-file=${ inputs.environment }.tfvars -out=${ inputs.plan-artifact-name }
+        run: |
+          terraform plan \
+            -var-file="${{ inputs.environment }}.tfvars" \
+            -out="${{ inputs.plan-artifact-name }}"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.aws-id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws-secret }}
