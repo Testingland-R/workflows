@@ -24,6 +24,11 @@ on:
         description: 'AWS Account ID'
         required: true
         type: string
+      aws-region:
+        description: 'AWS Region'
+        required: true
+        type: string
+        default: 'eu-west-1'
     secrets:
       aws-id:
         description: 'AWS Access Key ID'
@@ -40,11 +45,6 @@ jobs:
     defaults:
       run:
         working-directory: ${{ inputs.working-directory }}
-    env:
-      AWS_ACCOUNT_ID: ${{ inputs.aws-account-id }}
-      ENVIRONMENT: ${{ inputs.environment }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.aws-id }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.aws-secret }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -58,6 +58,13 @@ jobs:
         uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: 1.15.7
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.aws-id }}
+          aws-secret-access-key: ${{ secrets.aws-secret }}
+          aws-region:   # o la región que uses
 
       - name: Terraform Init
         run: terraform init
