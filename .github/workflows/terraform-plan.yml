@@ -71,7 +71,7 @@ jobs:
       - name: Terraform Plan
         run: |
           terraform plan \
-            -var-file="${{ inputs.environment }}.tfvars" \
+            -var-file="environments/${{ inputs.environment }}.tfvars" \
             -out="${{ inputs.plan-artifact-name }}"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.aws-id }}
