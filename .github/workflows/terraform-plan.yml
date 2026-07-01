@@ -41,7 +41,6 @@ jobs:
   terraform-plan:
     name: Terraform Plan
     runs-on: Linux
-    environment: ${{ inputs.environment }}
     defaults:
       run:
         working-directory: ${{ inputs.working-directory }}
