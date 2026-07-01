@@ -16,6 +16,22 @@ on:
         required: false
         type: string
         default: 'tfplans'
+      aws-id:
+        description: 'AWS ID'
+        required: true
+        type: string
+      aws-secret:
+        description: 'AWS Secret'
+        required: true
+        type: string
+      environment:
+        description: 'Environment name'
+        required: true
+        type: string
+      aws-account-id:
+        description: 'AWS Account ID'
+        required: true
+        type: string
 
 jobs:
 
@@ -26,8 +42,10 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     env:
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-      ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+      AWS_ACCOUNT_ID: ${{ inputs.aws-account-id }}
+      ENVIRONMENT: ${{ inputs.environment }}
+      AWS_ACCESS_KEY_ID: ${{ inputs.aws-id }}
+      AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -49,7 +67,7 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -var-file=${ vars.ENVIRONMENT}.tfvars -out=${ inputs.plan-artifact-name }
+        run: terraform plan -var-file=${ inputs.environment }.tfvars -out=${ inputs.plan-artifact-name }
 
       - name: Upload Terraform plan artifact
         uses: actions/upload-artifact@v4
