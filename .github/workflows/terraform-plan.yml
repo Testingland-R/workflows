@@ -27,6 +27,7 @@ on:
       aws-region:
         description: 'AWS Region'
         type: string
+        required: false
         default: 'eu-west-1'
     secrets:
       aws-id:
@@ -63,7 +64,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.aws-id }}
           aws-secret-access-key: ${{ secrets.aws-secret }}
-          aws-region:   # o la región que uses
+          aws-region: ${{ inputs.aws-region }}   # o la región que uses
 
       - name: Terraform Init
         run: terraform init
