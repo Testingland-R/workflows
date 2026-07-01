@@ -82,5 +82,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.plan-artifact-name }}
-          path: ${ inputs.plan-artifact-path }/${ inputs.plan-artifact-name }
+          path: ${{ inputs.plan-artifact-name }}
           retention-days: 7
