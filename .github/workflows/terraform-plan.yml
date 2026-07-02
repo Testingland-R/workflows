@@ -29,6 +29,11 @@ on:
         type: string
         required: false
         default: 'eu-west-1'
+      upload-artifacts:
+        description: 'Whether to upload the Terraform plan artifact'
+        required: false
+        type: boolean
+        default: false
     secrets:
       aws-id:
         description: 'AWS Access Key ID'
@@ -77,6 +82,7 @@ jobs:
             -out="${{ env.PLAN_ARTIFACT_NAME }}"
 
       - name: Upload plan artifact
+        if: ${{ inputs.upload-artifacts }}
         uses: actions/upload-artifact@v7
         with:
           name: "${{ env.PLAN_ARTIFACT_NAME }}"
