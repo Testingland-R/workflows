@@ -80,5 +80,5 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: "${{ env.PLAN_ARTIFACT_NAME }}"
-          path: "${{ env.PLAN_ARTIFACT_NAME }}"
+          path: .
           retention-days: 7
