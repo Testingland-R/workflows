@@ -76,7 +76,7 @@ jobs:
             -var-file="environments/${{ inputs.environment }}.tfvars" \
             -out="${{ env.PLAN_ARTIFACT_NAME }}"
 
-      - name: Upload Terraform plan artifact
+      - name: Upload plan artifact
         uses: actions/upload-artifact@v7
         with:
           name: "${{ env.PLAN_ARTIFACT_NAME }}"
