@@ -38,7 +38,7 @@ on:
 
 jobs:
 
-  terraform-plan:
+  terraform-apply:
     name: Terraform Apply
     runs-on: Linux
     defaults:
