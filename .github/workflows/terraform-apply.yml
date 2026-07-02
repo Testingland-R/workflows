@@ -49,6 +49,8 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.aws-secret }}
       AWS_DEFAULT_REGION: ${{ inputs.aws-region }}
       PLAN_ARTIFACT_NAME: ${{ inputs.plan-artifact-name }}-${{ inputs.aws-account-id }}-${{ inputs.environment }}-${{ github.event.pull_request.head.sha }}.tfplan
+    environment:
+      name: ${{ inputs.environment }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
