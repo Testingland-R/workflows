@@ -39,7 +39,7 @@ on:
 jobs:
 
   terraform-plan:
-    name: Terraform Plan
+    name: Terraform Apply
     runs-on: Linux
     defaults:
       run:
@@ -65,22 +65,16 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws-secret }}
           AWS_DEFAULT_REGION: ${{ inputs.aws-region }}
 
-      - name: Terraform Validate
-        run: terraform validate
+      - name: Download coverage artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: "${{ inputs.plan-artifact-name }}-${{ inputs.aws-account-id }}-${{ inputs.environment }}.tfplan"
+          path: .
 
-      - name: Terraform Plan
+      - name: Terraform Apply
         run: |
-          terraform plan \
-            -var-file="environments/${{ inputs.environment }}.tfvars" \
-            -out="${{ inputs.plan-artifact-name }}"
+          terraform apply -auto-approve "${{ inputs.plan-artifact-name }}-${{ inputs.aws-account-id }}-${{ inputs.environment }}.tfplan"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.aws-id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws-secret }}
           AWS_DEFAULT_REGION: ${{ inputs.aws-region }}
-
-      - name: Upload Terraform plan artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: "${{ inputs.plan-artifact-name }}-${{ inputs.aws-account-id }}-${{ inputs.environment }}.tfplan"
-          path: "${{ inputs.plan-artifact-name }}-${{ inputs.aws-account-id }}-${{ inputs.environment }}.tfplan"
-          retention-days: 7
